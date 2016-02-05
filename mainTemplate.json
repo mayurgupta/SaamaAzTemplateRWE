@@ -111,8 +111,8 @@
     "location": "[resourceGroup().location]",
     "dataDisk1VhdName": "datadisk1--------------remove-------------",
     "imagePublisher": "saama",
-    "imageOffer": "fluidanalyticsengine",
-    "OSDiskName": "peadisk",
+    "imageOffer": "realworldevidence",
+    "OSDiskName": "rwedisk",
     "nicName": "[parameters('nicName')]",
     "addressPrefix": "[parameters('addressPrefix')]",
     "subnetName": "[parameters('subnetName')]",
@@ -219,7 +219,7 @@
           "imageReference": {
             "publisher": "[variables('imagePublisher')]",
             "offer": "[variables('imageOffer')]",
-            "sku": "PATIENTEXPERIENCE",
+            "sku": "TREATMENTPATHWAYS",
             "version": "latest"
           },
           "osDisk": {

@@ -7,7 +7,7 @@
         "name": "VMName",
         "type": "Microsoft.Common.TextBox",
         "label": "VM name",
-        "toolTip": "The name of the new SaamaPEA VM.",
+        "toolTip": "The name of the new SaamaRWE VM.",
         "constraints": {
           "required": true,
           "regex": "^[a-z0-9]{3,24}$",
@@ -63,10 +63,10 @@
             },
             "toolTip": {
               "virtualNetwork": "Virtual Network Name",
-              "subnets": "Subnets requied for the SaamaPEA solution"
+              "subnets": "Subnets requied for the SaamaRWE solution"
             },
             "defaultValue": {
-              "name": "SaamaPEAwebProtectedVNet",
+              "name": "SaamaRWEwebProtectedVNet",
               "addressPrefixSize": "/16"
             },
             "constraints": {
@@ -113,8 +113,8 @@
             "osPlatform": "Linux",
             "imageReference": {
               "publisher": "saama",
-              "offer": "fluidanalyticsengine",
-              "sku": "PATIENTEXPERIENCE"
+              "offer": "realworldevidence",
+              "sku": "TREATMENTPATHWAYS"
             },
             "count": "1"
           },
@@ -122,7 +122,7 @@
             "name": "storageAccount",
             "type": "Microsoft.Storage.StorageAccountSelector",
             "label": "Storage Account",
-            "toolTip": "Storage Account for the disk drive of the Virtual SaamaPEA.",
+            "toolTip": "Storage Account for the disk drive of the Virtual SaamaRWE.",
             "defaultValue": {
               "type": "Standard_LRS"
             },
@@ -138,9 +138,9 @@
       },
       {
         "name": "IPConfig",
-        "label": "SaamaPEA IP Address Assignments",
+        "label": "SaamaRWE IP Address Assignments",
         "subLabel": {
-          "preValidation": "Configure the Public IP and the IP Addresses for each NIC on the SaamaPEA",
+          "preValidation": "Configure the Public IP and the IP Addresses for each NIC on the SaamaRWE",
           "postValidation": "Done"
         },
         "bladeTitle": "IP Assignment",
@@ -157,7 +157,7 @@
               "domainNameLabel": "DNS prefix to use for the public IP address (e.g. [dnsPrefix].region.cloudapp.azure.com)"
             },
             "defaultValue": {
-              "publicIpAddressName": "publicip-SaamaPEA",
+              "publicIpAddressName": "publicip-SaamaRWE",
               "domainNameLabel": "[basics('vmName')]"
             },
             "options": {
