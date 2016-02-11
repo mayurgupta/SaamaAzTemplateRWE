@@ -7,7 +7,7 @@
         "name": "VMName",
         "type": "Microsoft.Common.TextBox",
         "label": "VM name",
-        "toolTip": "The name of the new SaamaRWE VM.",
+        "toolTip": "The name of the new SaamaPEA VM.",
         "constraints": {
           "required": true,
           "regex": "^[a-z0-9]{3,24}$",
@@ -22,7 +22,7 @@
         "osPlatform": "Linux"
       },
       {
-        "name": "SSHCredntials",
+        "name": "passwordElement",
         "type": "Microsoft.Compute.CredentialsCombo",
         "label": {
           "authenticationType": "Authentication type",
@@ -63,20 +63,23 @@
             },
             "toolTip": {
               "virtualNetwork": "Virtual Network Name",
-              "subnets": "Subnets requied for the SaamaRWE solution"
+              "subnets": "Subnets requied for the SaamaPEA solution"
             },
             "defaultValue": {
-              "name": "SaamaRWEwebProtectedVNet",
+              "name": "SaamaPEAwebProtectedVNet",
               "addressPrefixSize": "/16"
             },
-            "constraints": {
-              "minAddressPrefixSize": "/16"
+            "options": {
+              "hideExisting": true
             },
-            "subnets": {
+             "constraints": {
+    "minAddressPrefixSize": "/16"
+  },
+  "subnets": {
               "subnet1": {
-                "label": "Outside Subnet",
+                "label": "Subnet",
                 "defaultValue": {
-                  "name": "PublicFacingSubnet",
+                  "name": "Subnet",
                   "addressPrefixSize": "/24"
                 },
                 "constraints": {
@@ -93,8 +96,8 @@
             "label": "Virtual machine size",
             "toolTip": "The size of virtual machine to provision.",
             "recommendedSizes": [
-              "Standard_A3",
-              "Standard_A4",
+              "Standard_D3",
+              "Standard_D3_v2",
               "Standard_D4"
             ],
             "constraints": {
@@ -113,8 +116,8 @@
             "osPlatform": "Linux",
             "imageReference": {
               "publisher": "saama",
-              "offer": "realworldevidence",
-              "sku": "TREATMENTPATHWAYS"
+              "offer": "fluidanalyticsengine",
+              "sku": "PATIENTEXPERIENCE"
             },
             "count": "1"
           },
@@ -122,7 +125,7 @@
             "name": "storageAccount",
             "type": "Microsoft.Storage.StorageAccountSelector",
             "label": "Storage Account",
-            "toolTip": "Storage Account for the disk drive of the Virtual SaamaRWE.",
+            "toolTip": "Storage Account for the disk drive of the Virtual SaamaPEA.",
             "defaultValue": {
               "type": "Standard_LRS"
             },
@@ -132,15 +135,18 @@
                 "Standard_GRS"
               ],
               "required": true
+            },
+            "options": {
+              "hideExisting": true
             }
           }
         ]
       },
       {
         "name": "IPConfig",
-        "label": "SaamaRWE IP Address Assignments",
+        "label": "SaamaPEA IP Address Assignments",
         "subLabel": {
-          "preValidation": "Configure the Public IP and the IP Addresses for each NIC on the SaamaRWE",
+          "preValidation": "Configure the Public IP and the IP Addresses for each NIC on the SaamaPEA",
           "postValidation": "Done"
         },
         "bladeTitle": "IP Assignment",
@@ -157,12 +163,13 @@
               "domainNameLabel": "DNS prefix to use for the public IP address (e.g. [dnsPrefix].region.cloudapp.azure.com)"
             },
             "defaultValue": {
-              "publicIpAddressName": "publicip-SaamaRWE",
+              "publicIpAddressName": "publicip-SaamaPEA",
               "domainNameLabel": "[basics('vmName')]"
             },
             "options": {
               "hideNone": false,
-              "hideDomainNameLabel": false
+              "hideDomainNameLabel": false,
+              "hideExisting": true
             },
             "constraints": {
               "required": {
@@ -197,23 +204,17 @@
       "vmName": "[basics('VMName')]",
       "adminUsername": "[basics('adminUsername')]",
       "adminPassword": "[basics('passwordElement')]",
-      "VirtualMachineSize": "[steps('StorageNetworkConfig').vmSize]",
+      "virtualNetName": "[steps('StorageNetworkConfig').virtualNetwork.name]",
+      "subnetName": "[steps('StorageNetworkConfig').virtualNetwork.subnets.subnet1.name]",
+      "subnetPrefix": "[steps('StorageNetworkConfig').virtualNetwork.subnets.subnet1.addressPrefix]",
+      "virtualNetworkAddressPrefix": "[steps('StorageNetworkConfig').virtualNetwork.addressPrefix]",
+      "vmSize": "[steps('StorageNetworkConfig').vmSize]",
+      "storageAccountName": "[steps('StorageNetworkConfig').storageAccount.name]",
+      "storageAccountType": "[steps('StorageNetworkConfig').storageAccount.type]",
       "publicIPAddressName": "[steps('IPConfig').publicIpAddress.name]",
       "publicIPAddressType": "[steps('IPConfig').publicIPAddressTypeElement]",
-      "uniqueDnsPrefixForPublicIP": "[steps('IPConfig').publicIpAddress.domainNameLabel]",
-      "publicIPNewOrExistingOrNone": "[steps('IPConfig').publicIpAddress.newOrExistingOrNone]",
-      "publicIPAddressResourceGroup": "[steps('IPConfig').publicIpAddress.resourceGroup]",
-      "StorageAccountName": "[steps('StorageNetworkConfig').storageAccount.name]",
-      "StorageAccountType": "[steps('StorageNetworkConfig').storageAccount.type]",
-      "storageAccountNewOrExisting": "[steps('StorageNetworkConfig').storageAccount.newOrExisting]",
-      "storageAccountExistingRG": "[steps('StorageNetworkConfig').storageAccount.resourceGroup]",
-      "location": "[location()]",
-      "vnetNewOrExisting": "[steps('StorageNetworkConfig').virtualNetwork.newOrExisting]",
-      "virtualnetName": "[steps('StorageNetworkConfig').virtualNetwork.name]",
-      "virtualNetworkExistingRGName": "[steps('StorageNetworkConfig').virtualNetwork.resourceGroup]",
-      "virtualNetworkAddressPrefix": "[steps('StorageNetworkConfig').virtualNetwork.addressPrefix]",
-      "Subnet1Name": "[steps('StorageNetworkConfig').virtualNetwork.subnets.subnet1.name]",
-      "Subnet1Prefix": "[steps('StorageNetworkConfig').virtualNetwork.subnets.subnet1.addressPrefix]"
+      "dnsLabelPrefix": "[steps('IPConfig').publicIpAddress.domainNameLabel]",
+      "location": "[location()]"
     }
   }
 }
