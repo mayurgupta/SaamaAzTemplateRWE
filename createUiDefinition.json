@@ -2,380 +2,218 @@
   "handler": "Microsoft.Compute.MultiVm",
   "version": "0.0.1-preview",
   "parameters": {
-    
-
-"basics": [
+    "basics": [
       {
         "name": "VMName",
         "type": "Microsoft.Common.TextBox",
-      
-
-  "label": "VM name",
+        "label": "VM name",
         "toolTip": "The name of the new SaamaRWE VM.",
-        
-
-"constraints": {
+        "constraints": {
           "required": true,
           "regex": "^[a-z0-9]{3,24}$",
-          
-
-"validationMessage": "Cluster names must be between 3 and 24 characters long, and can 
-
-contain only numbers and lowercase letters."
+          "validationMessage": "Cluster names must be between 3 and 24 characters long, and can contain only numbers and lowercase letters."
         }
       },
       {
-        "name": 
-
-"adminUsername",
+        "name": "adminUsername",
         "type": "Microsoft.Compute.UserNameTextBox",
-        "label": 
-
-"Username",
-        "toolTip": "Admin username for the virtual machines. Same Credientials 
-
-is to SSH to the box.",
+        "label": "Username",
+        "toolTip": "Admin username for the virtual machines. Same Credientials is to SSH to the box.",
         "osPlatform": "Linux"
       },
       {
-        "name": 
-
-"passwordElement",
+        "name": "passwordElement",
         "type": "Microsoft.Compute.CredentialsCombo",
         "label": {
-   
-
-       "authenticationType": "Authentication type",
+          "authenticationType": "Authentication type",
           "password": "Password",
-        
-
-  "confirmPassword": "Confirm password",
+          "confirmPassword": "Confirm password",
           "sshPublicKey": "SSH public key"
-        
-
-},
+        },
         "toolTip": {
           "authenticationType": "",
           "password": "",
-          
-
-"sshPublicKey": ""
+          "sshPublicKey": ""
         },
         "constraints": {
           "required": true
         },
-    
-
-    "options": {
+        "options": {
           "hideConfirmation": false
         },
         "osPlatform": "Linux"
-  
-
-    }
+      }
     ],
     "steps": [
       {
         "name": "StorageNetworkConfig",
-        "label": 
-
-"Network and Storage Settings",
+        "label": "Network and Storage Settings",
         "subLabel": {
-          "preValidation": "Configure 
-
-the network and storage options",
+          "preValidation": "Configure the network and storage options",
           "postValidation": "Done"
         },
-        
-
-"bladeTitle": "Network and Storage Settings",
+        "bladeTitle": "Network and Storage Settings",
         "elements": [
           {
-            
-
-"name": "virtualNetwork",
+            "name": "virtualNetwork",
             "type": "Microsoft.Network.VirtualNetworkCombo",
-       
-
-     "label": {
+            "label": {
               "virtualNetwork": "Virtual network",
-              "subnets": 
-
-"Subnets"
+              "subnets": "Subnets"
             },
             "toolTip": {
-              "virtualNetwork": "Virtual 
-
-Network Name",
+              "virtualNetwork": "Virtual Network Name",
               "subnets": "Subnets requied for the SaamaRWE solution"
-          
-
-  },
+            },
             "defaultValue": {
               "name": "SaamaRWEwebProtectedVNet",
-          
-
-    "addressPrefixSize": "/16"
+              "addressPrefixSize": "/16"
             },
             "options": {
-              
-
-"hideExisting": true
+              "hideExisting": true
             },
              "constraints": {
-    "minAddressPrefixSize": 
-
-"/16"
+    "minAddressPrefixSize": "/16"
   },
   "subnets": {
               "subnet1": {
                 "label": "Subnet",
-         
-
-       "defaultValue": {
+                "defaultValue": {
                   "name": "Subnet",
-                  
-
-"addressPrefixSize": "/24"
+                  "addressPrefixSize": "/24"
                 },
                 "constraints": {
-                
-
-  "minAddressPrefixSize": "/24",
+                  "minAddressPrefixSize": "/24",
                   "minAddressCount": 12,
-                  
-
-"requireContiguousAddresses": false
+                  "requireContiguousAddresses": false
                 }
               }
             }
-          
-
-},
+          },
           {
             "name": "vmSize",
-            "type": 
-
-"Microsoft.Compute.SizeSelector",
+            "type": "Microsoft.Compute.SizeSelector",
             "label": "Virtual machine size",
-            
-
-"toolTip": "The size of virtual machine to provision.",
+            "toolTip": "The size of virtual machine to provision.",
             "recommendedSizes": [
-    
-
-          "Standard_D3",
+              "Standard_D3",
               "Standard_D3_v2",
               "Standard_D4"
-          
-
-  ],
+            ],
             "constraints": {
               "allowedSizes": [
-                
-
-"Standard_A3",
+                "Standard_A3",
                 "Standard_A4",
                 "Standard_D2",
-                
-
-"Standard_D3",
+                "Standard_D3",
                 "Standard_D4",
                 "Standard_D2_v2",
-               
-
- "Standard_D3_v2",
+                "Standard_D3_v2",
                 "Standard_D4_v2"
               ],
-              "required": 
-
-true
+              "required": true
             },
             "osPlatform": "Linux",
             "imageReference": {
-         
-
-     "publisher": "saama",
+              "publisher": "saama",
               "offer": "realworldevidence",
-              "sku": 
-
-"treatmentpathways"
+              "sku": "treatmentpathways"
             },
             "count": "1"
           },
           {
-            
-
-"name": "storageAccount",
+            "name": "storageAccount",
             "type": "Microsoft.Storage.StorageAccountSelector",
-    
-
-        "label": "Storage Account",
-            "toolTip": "Storage Account for the disk 
-
-drive of the Virtual SaamaRWE.",
+            "label": "Storage Account",
+            "toolTip": "Storage Account for the disk drive of the Virtual SaamaRWE.",
             "defaultValue": {
-              "type": 
-
-"Standard_LRS"
+              "type": "Standard_LRS"
             },
             "constraints": {
               "allowedTypes": [
-     
-
-           "Standard_LRS",
+                "Standard_LRS",
                 "Standard_GRS"
               ],
-              
-
-"required": true
+              "required": true
             },
             "options": {
               "hideExisting": true
-    
-
-        }
+            }
           }
         ]
       },
       {
         "name": "IPConfig",
-        "label": 
-
-"SaamaRWE IP Address Assignments",
+        "label": "SaamaRWE IP Address Assignments",
         "subLabel": {
-          "preValidation": 
-
-"Configure the Public IP and the IP Addresses for each NIC on the SaamaRWE",
-          
-
-"postValidation": "Done"
+          "preValidation": "Configure the Public IP and the IP Addresses for each NIC on the SaamaRWE",
+          "postValidation": "Done"
         },
         "bladeTitle": "IP Assignment",
-        "elements": 
-
-[
+        "elements": [
           {
             "name": "publicIpAddress",
-            "type": 
-
-"Microsoft.Network.PublicIpAddressCombo",
+            "type": "Microsoft.Network.PublicIpAddressCombo",
             "label": {
-              
-
-"publicIpAddress": "Public IP address name",
-              "domainNameLabel": "Domain name 
-
-label"
+              "publicIpAddress": "Public IP address name",
+              "domainNameLabel": "Domain name label"
             },
             "toolTip": {
-              "publicIpAddress": "Name of the 
-
-public IP address object",
-              "domainNameLabel": "DNS prefix to use for the 
-
-public IP address (e.g. [dnsPrefix].region.cloudapp.azure.com)"
+              "publicIpAddress": "Name of the public IP address object",
+              "domainNameLabel": "DNS prefix to use for the public IP address (e.g. [dnsPrefix].region.cloudapp.azure.com)"
             },
-            
-
-"defaultValue": {
+            "defaultValue": {
               "publicIpAddressName": "publicip-SaamaRWE",
-              
-
-"domainNameLabel": "[basics('vmName')]"
+              "domainNameLabel": "[basics('vmName')]"
             },
             "options": {
-              
-
-"hideNone": false,
+              "hideNone": false,
               "hideDomainNameLabel": false,
-              "hideExisting": 
-
-true
+              "hideExisting": true
             },
             "constraints": {
               "required": {
-                
-
-"domainNameLabel": true
+                "domainNameLabel": true
               }
             }
           },
           {
-            
-
-"name": "publicIPAddressTypeElement",
+            "name": "publicIPAddressTypeElement",
             "type": "Microsoft.Common.OptionsGroup",
-   
-
-         "label": "Public IP Address Type",
+            "label": "Public IP Address Type",
             "toolTip": "",
-            
-
-"defaultValue": "Static",
+            "defaultValue": "Static",
             "constraints": {
               "allowedValues": [
-       
-
-         {
+                {
                   "label": "Static",
                   "value": "Static"
-           
-
-     },
+                },
                 {
                   "label": "Dynamic",
-                  "value": 
-
-"Dynamic"
+                  "value": "Dynamic"
                 }
               ],
               "required": true
             }
-       
-
-   }
+          }
         ]
       }
     ],
     "outputs": {
       "vmName": "[basics('VMName')]",
-      
-
-"adminUsername": "[basics('adminUsername')]",
-      "adminPassword": "[basics
-
-('passwordElement')]",
-      "virtualNetworkName": "[steps
-
-('StorageNetworkConfig').virtualNetwork.name]",
-      "subnetName": "[steps
-
-('StorageNetworkConfig').virtualNetwork.subnets.subnet1.name]",
-      "subnetPrefix": 
-
-"[steps('StorageNetworkConfig').virtualNetwork.subnets.subnet1.addressPrefix]",
-      
-
-"addressPrefix": "[steps('StorageNetworkConfig').virtualNetwork.addressPrefix]",
-      
-
-"vmSize": "[steps('StorageNetworkConfig').vmSize]",
-      "storageAccountName": "[steps
-
-('StorageNetworkConfig').storageAccount.name]",
-      "storageAccountType": "[steps
-
-('StorageNetworkConfig').storageAccount.type]",
-      "publicIPAddressName": "[steps
-
-('IPConfig').publicIpAddress.name]",
-      "publicIPAddressType": "[steps
-
-('IPConfig').publicIPAddressTypeElement]",
-      "dnsLabelPrefix": "[steps
-
-('IPConfig').publicIpAddress.domainNameLabel]",
+      "adminUsername": "[basics('adminUsername')]",
+      "adminPassword": "[basics('passwordElement')]",
+      "virtualNetworkName": "[steps('StorageNetworkConfig').virtualNetwork.name]",
+      "subnetName": "[steps('StorageNetworkConfig').virtualNetwork.subnets.subnet1.name]",
+      "subnetPrefix": "[steps('StorageNetworkConfig').virtualNetwork.subnets.subnet1.addressPrefix]",
+      "addressPrefix": "[steps('StorageNetworkConfig').virtualNetwork.addressPrefix]",
+      "vmSize": "[steps('StorageNetworkConfig').vmSize]",
+      "storageAccountName": "[steps('StorageNetworkConfig').storageAccount.name]",
+      "storageAccountType": "[steps('StorageNetworkConfig').storageAccount.type]",
+      "publicIPAddressName": "[steps('IPConfig').publicIpAddress.name]",
+      "publicIPAddressType": "[steps('IPConfig').publicIPAddressTypeElement]",
+      "dnsLabelPrefix": "[steps('IPConfig').publicIpAddress.domainNameLabel]",
       "location": "[location()]"
     }
   }
